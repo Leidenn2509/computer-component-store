@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Shop</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <nav class="navbar" style="height: 60px; padding: 0px; background-color:#66a3ff;">
+        <div class="collapse navbar-collapse justify-content-between" style="text-align: center; display:block;" id="navbar">
+            <a class="navbar-brand shop-header" href="" id="shopName"></a>
+        </div>
+    </nav>
+
+    <div class="wrapper" id="background">
+        <nav id="sidebar">
+            <div class="sidebar-header" style="padding: 20px 0px 0px 20px;">
+                <a href="" style="pointer-events: none; cursor: default;">Categories</a>
+            </div>
+
+            <ul class="list-unstyled components" id="categories"></ul>
+
+            <div class="shop-text" style="text-align: center; margin-top: 20px;">
+                <div>
+                    <label>Phone: </label>
+                <label id="shopPhone"></label>
+                </div>
+                <div>
+                    <label>Address: </label>
+                    <label id="shopAddress"></label>
+                </div>
+            </div>
+        </nav>
+
+
+    </div>
+
+<script>
+
+    $('#shopName').text("Base shop")
+    $('#shopPhone').text("8-800-535-35-55")
+    $('#shopAddress').text("Pirogova 14")
+
+    var categoriesNames = JSON.parse('{{categories | safe}}')
+
+    if (categoriesNames !== 0) {
+        addCategories(categoriesNames)
+    }
+
+    function addCategories(cats) {
+        var p = document.getElementById('categories');
+        for (i in cats) {
+            var n = cats[i]["id"].split(".").length - 1
+            cats[i]["id"] = cats[i]["id"].split(".").join("a");
+
+            var li = document.createElement("li")
+            var a = document.createElement("a")
+            var ul = document.createElement("ul")
+            li.className = "active"
+            a.setAttribute("href", "#cat" + cats[i]["id"])
+            a.setAttribute("data-toggle", "collapse")
+            a.setAttribute("aria-expanded", "false")
+            a.className = "dropdown-toggle"
+            a.text = cats[i]["id"].split("a").join(".") + ". " + cats[i]["name"]
+            a.style = "font-size: " + (1 - 0.1 * n) + "em;"
+            ul.className = "collapse list-unstyled"
+            ul.id = "cat" + cats[i]["id"]
+            ul.style = "padding-left: " + 30 * n + "px !important;"
+            li.appendChild(a)
+            li.appendChild(ul)
+
+            if (!cats[i]["id"].includes('a')) {
+                p.appendChild(li)
+            } else {
+                parId = "cat" + cats[i]["id"].substring(0, cats[i]["id"].lastIndexOf("a"))
+                par = document.getElementById(parId);
+                par.appendChild(li)
+            }
+        }
+    }
+
+</script>
+</body>
+</html>
