@@ -41,7 +41,13 @@
             </div>
         </nav>
 
-
+        <div style="width: 100%; height: 100%;">
+            <div class="shop-path">
+                <div id="path" class="shop-path-text" style="float: left; margin-left: 20px;">Home</div>
+                <div class="shop-path-text" id="categoryInfo"></div>
+            </div>
+            <div id="field" style="padding: 20px;"></div>
+        </div>
     </div>
 
 <script>
@@ -55,6 +61,13 @@
     if (categoriesNames !== 0) {
         addCategories(categoriesNames)
     }
+
+    var f = document.getElementById('field')
+    var r = document.createElement("div")
+    r.style = "margin-bottom: 15px;"
+    r.className = "row"
+    addItem(r, 1, "https://cwrc.ca/sites/default/files/road-sign-361514_960_720_0.png", "Test item")
+    f.appendChild(r)
 
     function addCategories(cats) {
         var p = document.getElementById('categories');
@@ -85,6 +98,32 @@
                 par = document.getElementById(parId);
                 par.appendChild(li)
             }
+        }
+    }
+
+    function addItem(parent, id, img, text) {
+        var col = document.createElement("div")
+        var image = document.createElement("img")
+        col.className = "col"
+        col.style = "max-width: 200px; max-height: 300px; margin-right: 15px; float: left; "
+        col.id = id
+        image.className = "card-img-top"
+        image.style = "width: 200px; height: 200px;"
+        image.setAttribute("src", img)
+        var ta = document.createElement("textarea")
+        ta.className = "shop-text"
+        ta.style = "min-width: 200px; min-height: 100px; max-width: 200px; max-height: 100px; background-color: #99c2ff"
+        ta.setAttribute("readonly", "readonly")
+        ta.value = text
+        col.appendChild(image)
+        col.appendChild(ta)
+        parent.appendChild(col)
+    }
+
+    function clearField() {
+        var f = document.getElementById("field")
+        for (var i = f.childNodes.length - 1; i > -1; i--) {
+            f.childNodes[i].remove()
         }
     }
 
