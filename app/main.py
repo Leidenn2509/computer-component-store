@@ -1,17 +1,17 @@
-from flask import Flask
-
+from flask import Flask, make_response, render_template, request
+import json
 
 app = Flask(__name__)
 
 
-@app.route('/')
-def index():
-    return "<h1>Hello, World!</h1>"
-
-
-@app.route('/user/<name>')
-def user(name):
-    return '<h1>Hello, {0}!</h1>'.format(name)
+@app.route("/", methods=["POST", "GET"])
+def main():
+    if request.method == "POST":
+        return make_response("OK")
+    else:
+        return render_template("MainPage.html", categories=json.dumps([{"id": "1", "name": "Category1"},
+                                                                       {"id": "1.1", "name": "Category2"},
+                                                                       {"id": "2", "name": "Category3"}]))
 
 
 if __name__ == '__main__':
