@@ -1,7 +1,7 @@
 from flask import Flask, make_response, render_template, request
 import json
-
-app = Flask(__name__)
+from shop import app
+#from shop.service import *
 
 
 @app.route("/", methods=["POST", "GET"])
