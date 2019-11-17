@@ -20,3 +20,16 @@ def get_products(cat_num):
         res.append({"id": r[0], "name": r[1], "price": r[2], "installment_plan": r[3],
                     "warranty_period": r[4], "img_url": r[5], "description": r[6], "cat_num": r[7]})
     return res
+
+
+def get_filtered_products(params):
+    cursor = conn.cursor()
+    cursor.execute("""select * from product where cat_num = %(category)s and 
+        price >= %(minPrice)s and price <= %(maxPrice)s and warranty_period >= %(minWarranty)s and 
+        warranty_period <= %(maxWarranty)s and installment_plan = %(installment)s order by price desc""", params)
+    records = cursor.fetchall()
+    res = []
+    for r in records:
+        res.append({"id": r[0], "name": r[1], "price": r[2], "installment_plan": r[3],
+                    "warranty_period": r[4], "img_url": r[5], "description": r[6], "cat_num": r[7]})
+    return res
