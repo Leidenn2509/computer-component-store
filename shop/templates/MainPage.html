@@ -29,6 +29,42 @@
 
             <ul class="list-unstyled components" id="categories"></ul>
 
+            <div id="filters" style="display: none">
+                <div class="sidebar-header" style="padding: 20px 0px 0px 20px;">
+                    <a href="" style="pointer-events: none; cursor: default;">Filters</a>
+                </div>
+                <div class="shop-filter">
+                    <label style="width: 100%; text-align: center;">Price:</label>
+                    <label>From </label>
+                    <input type="text" id="minPrice" value=""/>
+                    <label> to </label>
+                    <input type="text" id="maxPrice" value=""/>
+                    <div class="slider-container">
+                        <div class="" id="sliderPrice"></div>
+                    </div>
+
+                    <label style="width: 100%; text-align: center;">Warranty period:</label>
+                    <label>From </label>
+                    <input type="text" id="minWarranty" value=""/>
+                    <label> to </label>
+                    <input type="text" id="maxWarranty" value=""/>
+                    <div class="slider-container">
+                        <div class="" id="sliderWarranty"></div>
+                    </div>
+
+                    <label style="width: 100%; text-align: center;">Installment plan:</label>
+                    <div style="display: flex; align-items: center; justify-content: center;>">
+                        <label>Show installment </label>
+                        <input type="checkbox" id="installment" checked>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: center; margin-top: 10px;">
+                        <button class="btn btn-primary" type="submit" id="clearFilters" style="text-align: center; width: 100px; margin-right: 10px;">Clear filters</button>
+                        <button class="btn btn-primary" type="submit" id="applyFilters" style="text-align: center; width: 100px;">Show results</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="shop-text" style="text-align: center; margin-top: 20px;">
                 <div>
                     <label>Phone: </label>
@@ -54,6 +90,8 @@
 
     var rowLen = 5
     var curCat = ""
+
+    $('#filters').hide()
 
     $('#shopName').text("Base shop")
     $('#shopPhone').text("8-800-535-35-55")
@@ -88,6 +126,7 @@
                 createItemsTable(json["products"], "product")
             }
             xhr.send(data)
+            $('#filters').show()
         }
     })
 
