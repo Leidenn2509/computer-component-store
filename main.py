@@ -1,17 +1,21 @@
 from flask import Flask, make_response, render_template, request
 import json
 from shop import app
-#from shop.service import *
+from shop.service import *
 
 
 @app.route("/", methods=["POST", "GET"])
 def main():
     if request.method == "POST":
-        return make_response("OK")
+        data = json.loads(request.data.decode('utf-8').replace('\0', ''))
+
+        if data["action"] == "sendProducts":
+            products = get_products(data["category"])
+            return make_response(json.dumps({"action": "setProducts", "products": products}), 200,
+                                 {"content_type": "application/json"})
     else:
-        return render_template("MainPage.html", categories=json.dumps([{"id": "1", "name": "Category1"},
-                                                                       {"id": "1.1", "name": "Category2"},
-                                                                       {"id": "2", "name": "Category3"}]))
+        categories = get_categories()
+        return render_template('MainPage.html', categories=json.dumps(categories))
 
 
 if __name__ == '__main__':

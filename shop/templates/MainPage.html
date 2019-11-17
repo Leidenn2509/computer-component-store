@@ -52,6 +52,9 @@
 
 <script>
 
+    var rowLen = 5
+    var curCat = ""
+
     $('#shopName').text("Base shop")
     $('#shopPhone').text("8-800-535-35-55")
     $('#shopAddress').text("Pirogova 14")
@@ -68,6 +71,25 @@
     r.className = "row"
     addItem(r, 1, "https://cwrc.ca/sites/default/files/road-sign-361514_960_720_0.png", "Test item")
     f.appendChild(r)
+
+    $('#categories').on('click', 'a', function() {
+        if (this.parentNode.getElementsByClassName("list-unstyled")[0].childNodes.length === 0) {
+            $('#background').css({"background": "linear-gradient(rgba(204, 224, 255, 0.7), rgba(204, 224, 255, 0.7)), url('../static/images/mops.jpg')",
+                                  "background-position": "center", "background-repeat": "no-repeat", "background-size": "100%"})
+            $('#categoryButtons').show()
+            curCat = this.text
+            curCat = curCat.substring(0, curCat.indexOf(" ") - 1)
+            var xhr = new XMLHttpRequest()
+            var data = JSON.stringify({"action": "sendProducts", "category": curCat})
+            xhr.open("POST", "/", true)
+            xhr.setRequestHeader("Content-Type", "application/json")
+            xhr.onload = function() {
+                var json = JSON.parse(xhr.responseText)
+                createItemsTable(json["products"], "product")
+            }
+            xhr.send(data)
+        }
+    })
 
     function addCategories(cats) {
         var p = document.getElementById('categories');
@@ -98,6 +120,46 @@
                 par = document.getElementById(parId);
                 par.appendChild(li)
             }
+        }
+    }
+
+    function createItemsTable(items, type) {
+        clearField()
+        var itemsInRow = 0;
+        var f = document.getElementById('field')
+        if (items.length === 0) {
+            var d = document.createElement("div")
+            d.innerHTML = "No items in this category for such filters"
+            d.style = "font-size: 20px;"
+            f.appendChild(d)
+            return
+        }
+        var r = document.createElement("div")
+        r.style = "margin-bottom: 15px;"
+        r.className = "row"
+        for (i in items) {
+            if (itemsInRow === rowLen) {
+                f.appendChild(r)
+                r = document.createElement("div")
+                r.style = "margin-bottom: 15px;"
+                r.className = "row"
+                itemsInRow = 0
+            }
+            if (type == "product") {
+                id = "p" + items[i]["id"]
+                text = "Name: " + items[i]["name"] + "\nPrice: " + items[i]["price"] + "\nWarranty_period: " + items[i]["warranty_period"]
+                img = items[i]["img_url"]
+                addItem(r, id, img, text)
+            } else if (type == "brand") {
+                id = "b" + items[i]["id"]
+                text = "Name: " + items[i]["name"] + "\nDescription: " + items[i]["description"]
+                img = items[i]["img_url"]
+                addItem(r, id, img, text)
+            }
+            itemsInRow += 1
+        }
+        if (itemsInRow !== 0) {
+            f.appendChild(r)
         }
     }
 
