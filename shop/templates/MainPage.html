@@ -126,6 +126,48 @@
                 createItemsTable(json["products"], "product")
             }
             xhr.send(data)
+
+            xhr2 = new XMLHttpRequest();
+            data = JSON.stringify({"action": "sendFilterValues", "category": curCat})
+            xhr2.open("POST", "/", true)
+            xhr2.setRequestHeader("Content-Type", "application/json")
+            xhr2.onload = function() {
+                var json = JSON.parse(xhr2.responseText)
+                console.log(json)
+                $("#sliderPrice").slider({
+                    min: json["values"]["minPrice"],
+                    max: json["values"]["maxPrice"],
+                    values: [json["values"]["minPrice"], json["values"]["maxPrice"]],
+                    range: true,
+                    stop: function(event, ui) {
+                        $("input#minPrice").val($("#sliderPrice").slider("values",0))
+                        $("input#maxPrice").val($("#sliderPrice").slider("values",1))
+                    },
+                    slide: function(event, ui){
+                        $("input#minPrice").val($("#sliderPrice").slider("values",0))
+                        $("input#maxPrice").val($("#sliderPrice").slider("values",1))
+                    }
+                })
+                $("input#minPrice").val(json["values"]["minPrice"])
+                $("input#maxPrice").val(json["values"]["maxPrice"])
+                $("#sliderWarranty").slider({
+                    min: json["values"]["minWarranty"],
+                    max: json["values"]["maxWarranty"],
+                    values: [json["values"]["minWarranty"], json["values"]["maxWarranty"]],
+                    range: true,
+                    stop: function(event, ui) {
+                        $("input#minWarranty").val($("#sliderWarranty").slider("values",0))
+                        $("input#maxWarranty").val($("#sliderWarranty").slider("values",1))
+                    },
+                    slide: function(event, ui){
+                        $("input#minWarranty").val($("#sliderWarranty").slider("values",0))
+                        $("input#maxWarranty").val($("#sliderWarranty").slider("values",1))
+                    }
+                })
+                $("input#minWarranty").val(json["values"]["minWarranty"])
+                $("input#maxWarranty").val(json["values"]["maxWarranty"])
+            }
+            xhr2.send(data);
             $('#filters').show()
         }
     })
