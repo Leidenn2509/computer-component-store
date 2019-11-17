@@ -17,7 +17,10 @@ def main():
             values = get_filter_values(data["category"])
             return make_response(json.dumps({"action": "setFilterValues", "values": values}), 200,
                                  {"content_type": "application/json"})
-
+        elif data["action"] == "sendFilteredProducts":
+            products = get_filtered_products(data)
+            return make_response(json.dumps({"action": "setFilteredProducts", "products": products}), 200,
+                                 {"content_type": "application/json"})
     else:
         categories = get_categories()
         return render_template('MainPage.html', categories=json.dumps(categories))

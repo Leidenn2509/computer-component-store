@@ -172,6 +172,25 @@
         }
     })
 
+    $('#applyFilters').on('click', function() {
+        var minPrice = $("input#minPrice").val()
+        var maxPrice = $("input#maxPrice").val()
+        var minWarranty = $("input#minWarranty").val()
+        var maxWarranty = $("input#maxWarranty").val()
+        var installment = $("input#installment").is(":checked")
+        var data = JSON.stringify({"action": "sendFilteredProducts", "category": curCat, "minPrice": minPrice,
+            "maxPrice": maxPrice, "minWarranty": minWarranty, "maxWarranty": maxWarranty, "installment": installment})
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST", "/", true)
+        xhr.setRequestHeader("Content-Type", "application/json")
+        xhr.onload = function() {
+            var json = JSON.parse(xhr.responseText)
+            console.log(json)
+            createItemsTable(json["products"], "product")
+        }
+        xhr.send(data)
+    })
+
     function addCategories(cats) {
         var p = document.getElementById('categories');
         for (i in cats) {
