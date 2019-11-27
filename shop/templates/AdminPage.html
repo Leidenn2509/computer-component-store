@@ -69,6 +69,100 @@
             </div>
         </div>
 
+        <div id="products" class="tabcontent" style="display: none;">
+            <div style="margin-left: 20px; margin-top: 20px; padding: 10px; background: #b3d1ff; float: left;">
+                <div class="shop-path-text" style="text-align: center; margin-bottom: 15px;">Add new product</div>
+                <div style="float: left;">
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Name</label>
+                        <input class="form-control" type="text" placeholder="Name" id="newProductName" style="width: 200px; height: 40px; margin-left: 10px;">
+                    </div>
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Price</label>
+                        <input class="form-control" type="text" placeholder="(integer or float)" id="newProductPrice" style="width: 200px; height: 40px; margin-left: 10px;">
+                    </div>
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Installment plan</label>
+                        <select class="form-control" id="newProductInstallmentPlan" style="width: 200px; height: 40px; margin-left: 10px;">
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Warranty period</label>
+                        <input class="form-control" type="text" placeholder="(integer)" id="newProductWarrantyPeriod" style="width: 200px; height: 40px; margin-left: 10px;">
+                    </div>
+                </div>
+                <div style="float: left;">
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Image</label>
+                        <input class="form-control" type="text" placeholder="Image url" id="newProductImage" style="width: 200px; height: 40px; margin-left: 10px;">
+                    </div>
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Description</label>
+                        <textarea class="form-control" placeholder="Product description" id="newProductDescription" style="width: 200px; height: 128px; margin-left: 10px;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Category</label>
+                        <select class="form-control" id="newProductCategory" style="width: 200px; height: 40px; margin-left: 10px;"></select>
+                    </div>
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Brand</label>
+                        <select class="form-control" id="newProductBrand" style="width: 200px; height: 40px; margin-left: 10px;"></select>
+                    </div>
+                    <button class="btn btn-success" type="submit" style="margin-left: 10px; width: 120px;" id="newProductAdd">Add new</button>
+                </div>
+            </div>
+            <div style="margin-left: 20px; margin-top: 20px; padding: 10px; background: #b3d1ff; float: left;">
+                <div class="shop-path-text" style="text-align: center; margin-bottom: 15px;">Update or remove product</div>
+                <div style="float: left;">
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Current product</label>
+                        <select class="form-control" id="curProduct" style="width: 200px; height: 40px; margin-left: 10px;"></select>
+                    </div>
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Name</label>
+                        <input class="form-control" type="text" placeholder="Name" id="curProductName" style="width: 200px; height: 40px; margin-left: 10px;">
+                    </div>
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Price</label>
+                        <input class="form-control" type="text" placeholder="(integer of float)" id="curProductPrice" style="width: 200px; height: 40px; margin-left: 10px;">
+                    </div>
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Installment plan</label>
+                        <select class="form-control" id="curProductInstallmentPlan" style="width: 200px; height: 40px; margin-left: 10px;">
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Warranty period</label>
+                        <input class="form-control" type="text" placeholder="(integer)" id="curProductWarrantyPeriod" style="width: 200px; height: 40px; margin-left: 10px;">
+                    </div>
+                </div>
+                <div style="float: left;">
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Image</label>
+                        <input class="form-control" type="text" placeholder="Image url" id="curProductImage" style="width: 200px; height: 40px; margin-left: 10px;">
+                    </div>
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Description</label>
+                        <textarea class="form-control" placeholder="Product description" id="curProductDescription" style="width: 200px; height: 128px; margin-left: 10px;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Category</label>
+                        <select class="form-control" id="curProductCategory" style="width: 200px; height: 40px; margin-left: 10px;"></select>
+                    </div>
+                    <div class="form-group">
+                        <label style="margin-left: 10px;">Brand</label>
+                        <select class="form-control" id="curProductBrand" style="width: 200px; height: 40px; margin-left: 10px;"></select>
+                    </div>
+                    <button class="btn btn-warning" type="submit" style="margin-left: 10px; width: 120px;" id="curProductUpdate">Update</button>
+                    <button class="btn btn-danger" type="submit" style="margin-left: 10px; width: 120px;" id="curProductRemove">Remove</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 <script>
