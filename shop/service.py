@@ -46,6 +46,15 @@ def update_category(data):
     conn.commit()
 
 
+def remove_category(id):
+    cursor = conn.cursor()
+    cursor.execute("""delete from category where cat_num = %(cat_num)s;""", {"cat_num": id})
+    cursor.execute("""delete from list_brand_product where prod_id IN 
+                        (select prod_id from product where cat_num = %(cat_num)s);""", {"cat_num": id})
+    cursor.execute("""delete from product where cat_num = %(cat_num)s;""", {"cat_num": id})
+    conn.commit()
+
+
 def get_products(cat_num):
     cursor = conn.cursor()
     cursor.execute("""select * from product where cat_num = %(cat_num)s order by price desc""", {"cat_num": cat_num})
