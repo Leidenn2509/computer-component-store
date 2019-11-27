@@ -1,6 +1,6 @@
 from flask import Flask, make_response, render_template, request
 import json
-from shop import app
+from shop import app, auth, ADMIN_LOGIN, ADMIN_PASSWORD
 from shop.service import *
 
 
@@ -28,6 +28,7 @@ def main():
 
 
 @app.route('/admin', methods=["POST", "GET"])
+@auth.login_required
 def admin():
     if request.method == 'POST':
         data = json.loads(request.data.decode('utf-8').replace('\0', ''))
@@ -87,6 +88,20 @@ def admin():
                                leaf_categories=json.dumps(leaf_categories),
                                products=json.dumps(products),
                                shop_info=json.dumps(shop_info))
+
+
+@auth.get_password
+def get_pw(username):
+    if username == ADMIN_LOGIN:
+        return ADMIN_PASSWORD
+    return None
+
+
+@app.route('/logout')
+def logout():
+    shop_info = get_shop_info()
+    categories = get_categories()
+    return render_template('MainPage.html', categories=json.dumps(categories), shop_info=json.dumps(shop_info)), 401
 
 
 if __name__ == '__main__':
