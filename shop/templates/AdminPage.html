@@ -328,10 +328,24 @@
         xhr.send(data)
     })
 
-
-
-
-
+    $('#shopUpdate').on('click', function() {
+        var data = JSON.stringify({"action": "updateShop",
+                                   "name": $('#shopName').val(),
+                                   "phone": $('#shopPhone').val(),
+                                   "address": $('#shopAddress').val()
+                                   })
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST", "/owner", true)
+        xhr.setRequestHeader("Content-Type", "application/json")
+        xhr.onload = function() {
+            var json = JSON.parse(xhr.responseText)
+            shopInfo = json["shop_info"]
+            $('#shopName').val(shopInfo["name"])
+            $('#shopPhone').val(shopInfo["phone"])
+            $('#shopAddress').val(shopInfo["address"])
+        }
+        xhr.send(data)
+    })
 
     function fillSelect(name, values) {
         select = document.getElementById(name)
