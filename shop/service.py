@@ -151,7 +151,7 @@ def get_shop_info():
     records = cursor.fetchall()
     res = {"name": "None", "phone": "None", "address": "None"}
     if records:
-        res = {"name": records[0][0], "phone": records[0][1], "address": records[0][2]}
+        res = {"name": records[0][0], "phone": records[0][1], "address": records[0][3]}
     return res
 
 

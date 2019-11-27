@@ -93,11 +93,11 @@
 
     $('#filters').hide()
 
-    $('#shopName').text("Base shop")
-    $('#shopPhone').text("8-800-535-35-55")
-    $('#shopAddress').text("Pirogova 14")
-
     var categoriesNames = JSON.parse('{{categories | safe}}')
+    var shopInfo = JSON.parse('{{shop_info | safe}}')
+    $('#shopName').text(shopInfo["name"])
+    $('#shopPhone').text(shopInfo["phone"])
+    $('#shopAddress').text(shopInfo["address"])
 
     if (categoriesNames !== 0) {
         addCategories(categoriesNames)

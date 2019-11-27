@@ -22,8 +22,9 @@ def main():
             return make_response(json.dumps({"action": "setFilteredProducts", "products": products}), 200,
                                  {"content_type": "application/json"})
     else:
+        shop_info = get_shop_info()
         categories = get_categories()
-        return render_template('MainPage.html', categories=json.dumps(categories))
+        return render_template('MainPage.html', categories=json.dumps(categories), shop_info=json.dumps(shop_info))
 
 
 @app.route('/admin', methods=["POST", "GET"])
