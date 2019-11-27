@@ -137,3 +137,10 @@ def update_product(data):
                     })
     conn.commit()
 
+
+def remove_product(id):
+    cursor = conn.cursor()
+    cursor.execute("""delete from list_brand_product where prod_id = %(prod_id)s""", {"prod_id": id})
+    cursor.execute("""delete from product where prod_id = %(prod_id)s""", {"prod_id": id})
+    conn.commit()
+
