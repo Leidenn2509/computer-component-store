@@ -55,6 +55,11 @@ def admin():
             return make_response(json.dumps({"action": "setCategories", "node_categories": node_categories,
                                              "leaf_categories": leaf_categories, "categories": categories}), 200,
                                  {"content_type": "application/json"})
+        elif data["action"] == "addProduct":
+            add_product(data)
+            products = get_all_products()
+            return make_response(json.dumps({"action": "setProducts", "products": products}), 200,
+                                 {"content_type": "application/json"})
     else:
         shop_info = get_shop_info()
         categories = get_categories()
