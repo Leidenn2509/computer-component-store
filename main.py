@@ -47,6 +47,14 @@ def admin():
             return make_response(json.dumps({"action": "setCategories", "node_categories": node_categories,
                                              "leaf_categories": leaf_categories, "categories": categories}), 200,
                                  {"content_type": "application/json"})
+        elif data["action"] == "removeCategory":
+            remove_category(data["id"])
+            categories = get_categories()
+            node_categories = get_node_categories()
+            leaf_categories = get_leaf_categories()
+            return make_response(json.dumps({"action": "setCategories", "node_categories": node_categories,
+                                             "leaf_categories": leaf_categories, "categories": categories}), 200,
+                                 {"content_type": "application/json"})
     else:
         shop_info = get_shop_info()
         categories = get_categories()
