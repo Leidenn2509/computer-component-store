@@ -106,10 +106,6 @@
                         <label style="margin-left: 10px;">Category</label>
                         <select class="form-control" id="newProductCategory" style="width: 200px; height: 40px; margin-left: 10px;"></select>
                     </div>
-                    <div class="form-group">
-                        <label style="margin-left: 10px;">Brand</label>
-                        <select class="form-control" id="newProductBrand" style="width: 200px; height: 40px; margin-left: 10px;"></select>
-                    </div>
                     <button class="btn btn-success" type="submit" style="margin-left: 10px; width: 120px;" id="newProductAdd">Add new</button>
                 </div>
             </div>
@@ -153,10 +149,6 @@
                         <label style="margin-left: 10px;">Category</label>
                         <select class="form-control" id="curProductCategory" style="width: 200px; height: 40px; margin-left: 10px;"></select>
                     </div>
-                    <div class="form-group">
-                        <label style="margin-left: 10px;">Brand</label>
-                        <select class="form-control" id="curProductBrand" style="width: 200px; height: 40px; margin-left: 10px;"></select>
-                    </div>
                     <button class="btn btn-warning" type="submit" style="margin-left: 10px; width: 120px;" id="curProductUpdate">Update</button>
                     <button class="btn btn-danger" type="submit" style="margin-left: 10px; width: 120px;" id="curProductRemove">Remove</button>
                 </div>
@@ -192,6 +184,45 @@
     var products = JSON.parse('{{products | safe}}')
     var shopInfo = JSON.parse('{{shop_info | safe}}')
 
+
+    $('#curCategory').on('change', function() {
+        cat = getById(categories, this.options[this.selectedIndex].value)
+        $('#curCategoryName').val(cat["name"])
+        $('#curCategoryNum').val(cat["id"])
+    })
+
+    $('#curProduct').on('change', function() {
+        pr = getById(products, this.options[this.selectedIndex].value)
+        $('#curProductName').val(pr["name"])
+        $('#curProductPrice').val(pr["price"])
+        $('#curProductInstallmentPlan').val("" + pr["installment_plan"])
+        $('#curProductWarrantyPeriod').val(pr["warranty_period"])
+        $('#curProductImage').val(pr["img_url"])
+        $('#curProductDescription').val(pr["description"])
+        $('#curProductCategory').val(pr["cat_num"])
+    })
+
+    $('#newCategoryAdd').on('click', function() {
+        var data = JSON.stringify({"action": "addCategory",
+                                   "name": $('#newCategoryName').val(),
+                                   "parent": $('#newCategoryParent').val()
+                                   })
+        $('#newCategoryName').val("")
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST", "/admin", true)
+        xhr.setRequestHeader("Content-Type", "application/json")
+        xhr.onload = function() {
+            var json = JSON.parse(xhr.responseText)
+            nodeCategories = json["node_categories"]
+            leafCategories = json["leaf_categories"]
+            categories = nodeCategories.concat(leafCategories)
+            fillSelect('newCategoryParent', nodeCategories)
+            fillSelect('curCategory', categories)
+            fillSelect('newProductCategory', leafCategories)
+            fillSelect('curProductCategory', leafCategories)
+        }
+        xhr.send(data)
+    })
 
     function fillSelect(name, values) {
         select = document.getElementById(name)
@@ -231,9 +262,6 @@
     fillSelect('newProductCategory', leafCategories)
     fillSelect('curProductCategory', leafCategories)
     fillSelect('curProduct', products)
-    fillSelect('newProductBrand', brands)
-    fillSelect('curProductBrand', brands)
-    fillSelect('curBrand', brands)
     $('#shopName').val(shopInfo["name"])
     $('#shopPhone').val(shopInfo["phone"])
     $('#shopAddress').val(shopInfo["address"])
