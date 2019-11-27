@@ -144,3 +144,12 @@ def remove_product(id):
     cursor.execute("""delete from product where prod_id = %(prod_id)s""", {"prod_id": id})
     conn.commit()
 
+
+def get_shop_info():
+    cursor = conn.cursor()
+    cursor.execute("""select * from shop""")
+    records = cursor.fetchall()
+    res = {"name": "None", "phone": "None", "address": "None"}
+    if records:
+        res = {"name": records[0][0], "phone": records[0][1], "address": records[0][2]}
+    return res
