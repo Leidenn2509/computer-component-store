@@ -163,9 +163,42 @@
             </div>
         </div>
 
+        <div id="shop" class="tabcontent" style="display: none;">
+            <div style="margin-left: 20px; margin-top: 20px; padding: 10px; background: #b3d1ff; float: left;">
+                <div class="shop-path-text" style="text-align: center; margin-bottom: 15px;">Update shop info</div>
+                <div class="form-group">
+                    <label style="margin-left: 10px;">Name</label>
+                    <input class="form-control" type="text" placeholder="Shop" id="shopName" style="width: 200px; height: 40px; margin-left: 10px;">
+                </div>
+                <div class="form-group">
+                    <label style="margin-left: 10px;">Phone</label>
+                    <input class="form-control" type="text" placeholder="8(800)553535" id="shopPhone" style="width: 200px; height: 40px; margin-left: 10px;">
+                </div>
+                <div class="form-group">
+                    <label style="margin-left: 10px;">Address</label>
+                    <input class="form-control" type="text" placeholder="Pirogova 14" id="shopAddress" style="width: 200px; height: 40px; margin-left: 10px;">
+                </div>
+                <button class="btn btn-warning" type="submit" style="margin-left: 10px; width: 120px;" id="shopUpdate">Update</button>
+            </div>
+        </div>
+
     </div>
 
 <script>
+
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent")
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none"
+        }
+        tablinks = document.getElementsByClassName("tablinks")
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "")
+        }
+        document.getElementById(tabName).style.display = "block"
+        evt.currentTarget.className += " active"
+    }
 
 </script>
 </body>
