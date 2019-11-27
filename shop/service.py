@@ -153,3 +153,13 @@ def get_shop_info():
     if records:
         res = {"name": records[0][0], "phone": records[0][1], "address": records[0][2]}
     return res
+
+
+def update_shop_info(data):
+    cursor = conn.cursor()
+    cursor.execute("""update shop set name = %(name)s, phone = %(phone)s, address = %(address)s""",
+                   {"name": data["name"],
+                    "phone": data["phone"],
+                    "address": data["address"]
+                    })
+    conn.commit()
