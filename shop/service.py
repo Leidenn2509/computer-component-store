@@ -39,6 +39,13 @@ def add_category(data):
     conn.commit()
 
 
+def update_category(data):
+    cursor = conn.cursor()
+    cursor.execute("""update category set cat_name = %(cat_name)s where cat_num = %(cat_num)s""",
+                   {"cat_name": data["name"], "cat_num": data["id"]})
+    conn.commit()
+
+
 def get_products(cat_num):
     cursor = conn.cursor()
     cursor.execute("""select * from product where cat_num = %(cat_num)s order by price desc""", {"cat_num": cat_num})
