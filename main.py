@@ -26,5 +26,10 @@ def main():
         return render_template('MainPage.html', categories=json.dumps(categories))
 
 
+@app.route('/admin', methods=["POST", "GET"])
+def admin():
+    return render_template('AdminPage.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
