@@ -35,6 +35,42 @@
         </div>
     </nav>
 
+    <div class="navbar-default">
+
+        <div id="categories" class="tabcontent">
+            <div style="margin-left: 20px; margin-top: 20px; padding: 10px; background: #b3d1ff; float: left;">
+                <div class="shop-path-text" style="text-align: center; margin-bottom: 15px;">Add new category</div>
+                <div class="form-group">
+                    <label style="margin-left: 10px;">Name</label>
+                    <input class="form-control" type="text" placeholder="Name" id="newCategoryName" style="width: 200px; height: 40px; margin-left: 10px;">
+                </div>
+                <div class="form-group">
+                    <label style="margin-left: 10px;">Parent</label>
+                    <select class="form-control" id="newCategoryParent" style="width: 200px; height: 40px; margin-left: 10px;"></select>
+                </div>
+                <button class="btn btn-success" type="submit" style="margin-left: 10px; width: 120px;" id="newCategoryAdd">Add new</button>
+            </div>
+            <div style="margin-left: 20px; margin-top: 20px; padding: 10px; background: #b3d1ff; float: left;">
+                <div class="shop-path-text" style="text-align: center; margin-bottom: 15px;">Update or remove category</div>
+                <div class="form-group">
+                    <label style="margin-left: 10px;">Current category</label>
+                    <select class="form-control" id="curCategory" style="width: 200px; height: 40px; margin-left: 10px;"></select>
+                </div>
+                <div class="form-group">
+                    <label style="margin-left: 10px;">Num</label>
+                    <input class="form-control" type="text" placeholder="0" id="curCategoryNum" style="width: 200px; height: 40px; margin-left: 10px;" readonly>
+                </div>
+                <div class="form-group">
+                    <label style="margin-left: 10px;">Name</label>
+                    <input class="form-control" type="text" placeholder="Name" id="curCategoryName" style="width: 200px; height: 40px; margin-left: 10px;">
+                </div>
+                <button class="btn btn-warning" type="submit" style="margin-left: 10px; width: 120px;" id="curCategoryUpdate">Update</button>
+                <button class="btn btn-danger" type="submit" style="margin-left: 10px; width: 120px;" id="curCategoryRemove">Remove</button>
+            </div>
+        </div>
+
+    </div>
+
 <script>
 
 </script>
