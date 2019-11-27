@@ -291,7 +291,27 @@
         xhr.send(data)
     })
 
-
+    $('#curProductUpdate').on('click', function() {
+        var data = JSON.stringify({"action": "updateProduct",
+                                   "id": $('#curProduct').val(),
+                                   "name": $('#curProductName').val(),
+                                   "price": $('#curProductPrice').val(),
+                                   "img_url": $('#curProductImage').val(),
+                                   "description": $('#curProductDescription').val(),
+                                   "warranty_period": $('#curProductWarrantyPeriod').val(),
+                                   "installment_plan": ($('#curProductInstallmentPlan').val() == 'true'),
+                                   "category": $('#curProductCategory').val()
+                                   })
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST", "/admin", true)
+        xhr.setRequestHeader("Content-Type", "application/json")
+        xhr.onload = function() {
+            var json = JSON.parse(xhr.responseText)
+            products = json["products"]
+            fillSelect('curProduct', products)
+        }
+        xhr.send(data)
+    })
 
 
     function fillSelect(name, values) {
