@@ -186,6 +186,33 @@
 
 <script>
 
+    var nodeCategories = JSON.parse('{{node_categories | safe}}')
+    var leafCategories = JSON.parse('{{leaf_categories | safe}}')
+    var categories = JSON.parse('{{categories | safe}}')
+    var products = JSON.parse('{{products | safe}}')
+    var shopInfo = JSON.parse('{{shop_info | safe}}')
+
+
+    function fillSelect(name, values) {
+        select = document.getElementById(name)
+        for (var i = select.childNodes.length - 1; i > -1; i--) {
+            select.childNodes[i].remove()
+        }
+        for (v in values) {
+            var opt = document.createElement("option")
+            opt.value = values[v]["id"]
+            opt.text = values[v]["name"]
+            select.appendChild(opt)
+        }
+        $('#' + name).trigger('change')
+    }
+    function getById(from, id) {
+        for (v in from) {
+            if (from[v]["id"] == id) {
+                return from[v]
+            }
+        }
+    }
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent")
@@ -199,6 +226,17 @@
         document.getElementById(tabName).style.display = "block"
         evt.currentTarget.className += " active"
     }
+    fillSelect('newCategoryParent', nodeCategories)
+    fillSelect('curCategory', categories)
+    fillSelect('newProductCategory', leafCategories)
+    fillSelect('curProductCategory', leafCategories)
+    fillSelect('curProduct', products)
+    fillSelect('newProductBrand', brands)
+    fillSelect('curProductBrand', brands)
+    fillSelect('curBrand', brands)
+    $('#shopName').val(shopInfo["name"])
+    $('#shopPhone').val(shopInfo["phone"])
+    $('#shopAddress').val(shopInfo["address"])
 
 </script>
 </body>

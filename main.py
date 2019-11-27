@@ -29,7 +29,17 @@ def main():
 
 @app.route('/admin', methods=["POST", "GET"])
 def admin():
-    return render_template('AdminPage.html')
+    shop_info = get_shop_info()
+    categories = get_categories()
+    node_categories = get_node_categories()
+    leaf_categories = get_leaf_categories()
+    products = get_all_products()
+    return render_template('AdminPage.html',
+                           categories=json.dumps(categories),
+                           node_categories=json.dumps(node_categories),
+                           leaf_categories=json.dumps(leaf_categories),
+                           products=json.dumps(products),
+                           shop_info=json.dumps(shop_info))
 
 
 if __name__ == '__main__':
