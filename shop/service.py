@@ -119,3 +119,21 @@ def add_product(data):
                     "desc": data["description"],
                     })
     conn.commit()
+
+
+def update_product(data):
+    cursor = conn.cursor()
+    cursor.execute("""update product set prod_name = %(name)s, price = %(price)s, 
+    installment_plan = %(plan)s, warranty_period = %(period)s, img_url = %(image)s, description = %(desc)s, 
+    cat_num = %(num)s where prod_id = %(id)s""",
+                   {"id": data["id"],
+                    "name": data["name"],
+                    "price": data["price"],
+                    "plan": data["installment_plan"],
+                    "period": data["warranty_period"],
+                    "num": data["category"],
+                    "image": data["img_url"],
+                    "desc": data["description"]
+                    })
+    conn.commit()
+
