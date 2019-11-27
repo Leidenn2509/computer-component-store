@@ -313,6 +313,25 @@
         xhr.send(data)
     })
 
+    $('#curProductRemove').on('click', function() {
+        var data = JSON.stringify({"action": "removeProduct",
+                                   "id": $('#curProduct').val()
+                                   })
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST", "/admin", true)
+        xhr.setRequestHeader("Content-Type", "application/json")
+        xhr.onload = function() {
+            var json = JSON.parse(xhr.responseText)
+            products = json["products"]
+            fillSelect('curProduct', products)
+        }
+        xhr.send(data)
+    })
+
+
+
+
+
 
     function fillSelect(name, values) {
         select = document.getElementById(name)
