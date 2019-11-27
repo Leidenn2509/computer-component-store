@@ -33,6 +33,12 @@ def get_leaf_categories():
     return res
 
 
+def add_category(data):
+    cursor = conn.cursor()
+    cursor.callproc('add_category', [len(data["parent"].split(".")) + 1, data["name"], data["parent"], ])
+    conn.commit()
+
+
 def get_products(cat_num):
     cursor = conn.cursor()
     cursor.execute("""select * from product where cat_num = %(cat_num)s order by price desc""", {"cat_num": cat_num})
