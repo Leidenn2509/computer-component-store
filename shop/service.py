@@ -102,3 +102,20 @@ def get_filter_values(cat_num):
                "maxWarranty": records[0][3]}
     return res
 
+
+def add_product(data):
+    cursor = conn.cursor()
+    cursor.execute("""select max(prod_id) from product""")
+    prod_id = cursor.fetchall()[0][0] + 1
+    cursor.execute("""insert into product (prod_id, prod_name, price, installment_plan, warranty_period, cat_num, 
+    img_url, description) values (%(id)s, %(name)s, %(price)s, %(plan)s, %(period)s, %(num)s, %(image)s, %(desc)s)""",
+                   {"id": prod_id,
+                    "name": data["name"],
+                    "price": data["price"],
+                    "plan": data["installment_plan"],
+                    "period": data["warranty_period"],
+                    "num": data["category"],
+                    "image": data["img_url"],
+                    "desc": data["description"],
+                    })
+    conn.commit()
