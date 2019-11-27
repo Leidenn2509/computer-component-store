@@ -1,8 +1,8 @@
-from flask import Flask, make_response, render_template, request
-import json
+from flask import make_response, render_template, request, send_from_directory
 from shop import app, auth, ADMIN_LOGIN, ADMIN_PASSWORD
 from shop.service import *
-
+import json
+import os
 
 @app.route("/", methods=["POST", "GET"])
 def main():
@@ -102,6 +102,12 @@ def logout():
     shop_info = get_shop_info()
     categories = get_categories()
     return render_template('MainPage.html', categories=json.dumps(categories), shop_info=json.dumps(shop_info)), 401
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static/images'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 if __name__ == '__main__':
