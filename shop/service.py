@@ -22,6 +22,17 @@ def get_node_categories():
     return res
 
 
+def get_leaf_categories():
+    cursor = conn.cursor()
+    cursor.execute("""select cat_num, cat_name from category where cat_num not in (select distinct f.cat_num from 
+                        category f, category f1 where f1.cat_num like f.cat_num || '.' || '%');""")
+    records = cursor.fetchall()
+    res = []
+    for r in sorted(records, key=lambda x: len(x[0])):
+        res.append({"id": r[0], "name": r[1]})
+    return res
+
+
 def get_products(cat_num):
     cursor = conn.cursor()
     cursor.execute("""select * from product where cat_num = %(cat_num)s order by price desc""", {"cat_num": cat_num})
