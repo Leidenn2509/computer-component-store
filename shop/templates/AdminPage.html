@@ -224,6 +224,27 @@
         xhr.send(data)
     })
 
+    $('#curCategoryUpdate').on('click', function() {
+        var data = JSON.stringify({"action": "updateCategory",
+                                   "id": $('#curCategoryNum').val(),
+                                   "name": $('#curCategoryName').val()
+                                   })
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST", "/admin", true)
+        xhr.setRequestHeader("Content-Type", "application/json")
+        xhr.onload = function() {
+            var json = JSON.parse(xhr.responseText)
+            nodeCategories = json["node_categories"]
+            leafCategories = json["leaf_categories"]
+            categories = nodeCategories.concat(leafCategories)
+            fillSelect('newCategoryParent', nodeCategories)
+            fillSelect('curCategory', categories)
+            fillSelect('newProductCategory', leafCategories)
+            fillSelect('curProductCategory', leafCategories)
+        }
+        xhr.send(data)
+    })
+
     function fillSelect(name, values) {
         select = document.getElementById(name)
         for (var i = select.childNodes.length - 1; i > -1; i--) {
