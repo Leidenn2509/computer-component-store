@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Shop</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <nav class="navbar" style="height: 60px; padding: 0px; background-color:#66a3ff;">
+        <div class="collapse navbar-collapse justify-content-between" style="text-align: center; display:block;" id="navbar">
+            <a class="navbar-brand shop-header" href="" id="shopName"></a>
+        </div>
+    </nav>
+
+    <div class="wrapper" id="background">
+        <nav id="sidebar">
+            <div class="sidebar-header" style="padding: 20px 0px 0px 20px;">
+                <a href="" style="pointer-events: none; cursor: default;">Categories</a>
+            </div>
+
+            <ul class="list-unstyled components" id="categories"></ul>
+
+            <div id="filters" style="display: none">
+                <div class="sidebar-header" style="padding: 20px 0px 0px 20px;">
+                    <a href="" style="pointer-events: none; cursor: default;">Filters</a>
+                </div>
+                <div class="shop-filter">
+                    <label style="width: 100%; text-align: center;">Price:</label>
+                    <label>From </label>
+                    <input type="text" id="minPrice" value=""/>
+                    <label> to </label>
+                    <input type="text" id="maxPrice" value=""/>
+                    <div class="slider-container">
+                        <div class="" id="sliderPrice"></div>
+                    </div>
+
+                    <label style="width: 100%; text-align: center;">Warranty period:</label>
+                    <label>From </label>
+                    <input type="text" id="minWarranty" value=""/>
+                    <label> to </label>
+                    <input type="text" id="maxWarranty" value=""/>
+                    <div class="slider-container">
+                        <div class="" id="sliderWarranty"></div>
+                    </div>
+
+                    <label style="width: 100%; text-align: center;">Installment plan:</label>
+                    <div style="display: flex; align-items: center; justify-content: center;>">
+                        <label>Show installment </label>
+                        <input type="checkbox" id="installment" checked>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: center; margin-top: 10px;">
+                        <button class="btn btn-primary" type="submit" id="clearFilters" style="text-align: center; width: 100px; margin-right: 10px;">Clear filters</button>
+                        <button class="btn btn-primary" type="submit" id="applyFilters" style="text-align: center; width: 100px;">Show results</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-text" style="text-align: center; margin-top: 20px;">
+                <div>
+                    <label>Phone: </label>
+                <label id="shopPhone"></label>
+                </div>
+                <div>
+                    <label>Address: </label>
+                    <label id="shopAddress"></label>
+                </div>
+            </div>
+        </nav>
+
+        <div style="width: 100%; height: 100%;">
+            <div class="shop-path">
+                <div id="path" class="shop-path-text" style="float: left; margin-left: 20px;">Home</div>
+                <div class="shop-path-text" id="categoryInfo"></div>
+            </div>
+            <div id="field" style="padding: 20px;"></div>
+        </div>
+    </div>
+
+<script>
+
+    var rowLen = 5
+    var curCat = ""
+
+    $('#filters').hide()
+
+    $('#shopName').text("Base shop")
+    $('#shopPhone').text("8-800-535-35-55")
+    $('#shopAddress').text("Pirogova 14")
+
+    var categoriesNames = JSON.parse('{{categories | safe}}')
+
+    if (categoriesNames !== 0) {
+        addCategories(categoriesNames)
+    }
+
+    var f = document.getElementById('field')
+    var r = document.createElement("div")
+    r.style = "margin-bottom: 15px;"
+    r.className = "row"
+    addItem(r, 1, "https://cwrc.ca/sites/default/files/road-sign-361514_960_720_0.png", "Test item")
+    f.appendChild(r)
+
+    $('#categories').on('click', 'a', function() {
+        if (this.parentNode.getElementsByClassName("list-unstyled")[0].childNodes.length === 0) {
+            $('#background').css({"background": "linear-gradient(rgba(204, 224, 255, 0.7), rgba(204, 224, 255, 0.7)), url('../static/images/mops.jpg')",
+                                  "background-position": "center", "background-repeat": "no-repeat", "background-size": "100%"})
+            $('#categoryButtons').show()
+            curCat = this.text
+            curCat = curCat.substring(0, curCat.indexOf(" ") - 1)
+            var xhr = new XMLHttpRequest()
+            var data = JSON.stringify({"action": "sendProducts", "category": curCat})
+            xhr.open("POST", "/", true)
+            xhr.setRequestHeader("Content-Type", "application/json")
+            xhr.onload = function() {
+                var json = JSON.parse(xhr.responseText)
+                createItemsTable(json["products"], "product")
+            }
+            xhr.send(data)
+
+            xhr2 = new XMLHttpRequest();
+            data = JSON.stringify({"action": "sendFilterValues", "category": curCat})
+            xhr2.open("POST", "/", true)
+            xhr2.setRequestHeader("Content-Type", "application/json")
+            xhr2.onload = function() {
+                var json = JSON.parse(xhr2.responseText)
+                console.log(json)
+                $("#sliderPrice").slider({
+                    min: json["values"]["minPrice"],
+                    max: json["values"]["maxPrice"],
+                    values: [json["values"]["minPrice"], json["values"]["maxPrice"]],
+                    range: true,
+                    stop: function(event, ui) {
+                        $("input#minPrice").val($("#sliderPrice").slider("values",0))
+                        $("input#maxPrice").val($("#sliderPrice").slider("values",1))
+                    },
+                    slide: function(event, ui){
+                        $("input#minPrice").val($("#sliderPrice").slider("values",0))
+                        $("input#maxPrice").val($("#sliderPrice").slider("values",1))
+                    }
+                })
+                $("input#minPrice").val(json["values"]["minPrice"])
+                $("input#maxPrice").val(json["values"]["maxPrice"])
+                $("#sliderWarranty").slider({
+                    min: json["values"]["minWarranty"],
+                    max: json["values"]["maxWarranty"],
+                    values: [json["values"]["minWarranty"], json["values"]["maxWarranty"]],
+                    range: true,
+                    stop: function(event, ui) {
+                        $("input#minWarranty").val($("#sliderWarranty").slider("values",0))
+                        $("input#maxWarranty").val($("#sliderWarranty").slider("values",1))
+                    },
+                    slide: function(event, ui){
+                        $("input#minWarranty").val($("#sliderWarranty").slider("values",0))
+                        $("input#maxWarranty").val($("#sliderWarranty").slider("values",1))
+                    }
+                })
+                $("input#minWarranty").val(json["values"]["minWarranty"])
+                $("input#maxWarranty").val(json["values"]["maxWarranty"])
+            }
+            xhr2.send(data);
+            $('#filters').show()
+        }
+    })
+
+    $('#applyFilters').on('click', function() {
+        var minPrice = $("input#minPrice").val()
+        var maxPrice = $("input#maxPrice").val()
+        var minWarranty = $("input#minWarranty").val()
+        var maxWarranty = $("input#maxWarranty").val()
+        var installment = $("input#installment").is(":checked")
+        var data = JSON.stringify({"action": "sendFilteredProducts", "category": curCat, "minPrice": minPrice,
+            "maxPrice": maxPrice, "minWarranty": minWarranty, "maxWarranty": maxWarranty, "installment": installment})
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST", "/", true)
+        xhr.setRequestHeader("Content-Type", "application/json")
+        xhr.onload = function() {
+            var json = JSON.parse(xhr.responseText)
+            console.log(json)
+            createItemsTable(json["products"], "product")
+        }
+        xhr.send(data)
+    })
+
+    $('#clearFilters').on('click', function() {
+        $('installment').prop('checked', true);
+        var xhr = new XMLHttpRequest()
+        var data = JSON.stringify({"action": "sendProducts", "category": curCat})
+        xhr.open("POST", "/", true)
+        xhr.setRequestHeader("Content-Type", "application/json")
+        xhr.onload = function() {
+            var json = JSON.parse(xhr.responseText)
+            createItemsTable(json["products"], "product")
+        }
+        xhr.send(data)
+        xhr2 = new XMLHttpRequest();
+        data = JSON.stringify({"action": "sendFilterValues", "category": curCat})
+        xhr2.open("POST", "/", true)
+        xhr2.setRequestHeader("Content-Type", "application/json")
+        xhr2.onload = function() {
+            var json = JSON.parse(xhr2.responseText)
+            console.log(json)
+            $("#sliderPrice").slider({
+                min: json["values"]["minPrice"],
+                max: json["values"]["maxPrice"],
+                values: [json["values"]["minPrice"], json["values"]["maxPrice"]],
+                range: true,
+                stop: function(event, ui) {
+                    $("input#minPrice").val($("#sliderPrice").slider("values",0))
+                    $("input#maxPrice").val($("#sliderPrice").slider("values",1))
+                },
+                slide: function(event, ui){
+                    $("input#minPrice").val($("#sliderPrice").slider("values",0))
+                    $("input#maxPrice").val($("#sliderPrice").slider("values",1))
+                }
+            })
+            $("input#minPrice").val(json["values"]["minPrice"])
+            $("input#maxPrice").val(json["values"]["maxPrice"])
+            $("#sliderWarranty").slider({
+                min: json["values"]["minWarranty"],
+                max: json["values"]["maxWarranty"],
+                values: [json["values"]["minWarranty"], json["values"]["maxWarranty"]],
+                range: true,
+                stop: function(event, ui) {
+                    $("input#minWarranty").val($("#sliderWarranty").slider("values",0))
+                    $("input#maxWarranty").val($("#sliderWarranty").slider("values",1))
+                },
+                slide: function(event, ui){
+                    $("input#minWarranty").val($("#sliderWarranty").slider("values",0))
+                    $("input#maxWarranty").val($("#sliderWarranty").slider("values",1))
+                }
+            })
+            $("input#minWarranty").val(json["values"]["minWarranty"])
+            $("input#maxWarranty").val(json["values"]["maxWarranty"])
+        }
+        xhr2.send(data);
+        $('#filters').show()
+    })
+
+    function addCategories(cats) {
+        var p = document.getElementById('categories');
+        for (i in cats) {
+            var n = cats[i]["id"].split(".").length - 1
+            cats[i]["id"] = cats[i]["id"].split(".").join("a");
+
+            var li = document.createElement("li")
+            var a = document.createElement("a")
+            var ul = document.createElement("ul")
+            li.className = "active"
+            a.setAttribute("href", "#cat" + cats[i]["id"])
+            a.setAttribute("data-toggle", "collapse")
+            a.setAttribute("aria-expanded", "false")
+            a.className = "dropdown-toggle"
+            a.text = cats[i]["id"].split("a").join(".") + ". " + cats[i]["name"]
+            a.style = "font-size: " + (1 - 0.1 * n) + "em;"
+            ul.className = "collapse list-unstyled"
+            ul.id = "cat" + cats[i]["id"]
+            ul.style = "padding-left: " + 30 * n + "px !important;"
+            li.appendChild(a)
+            li.appendChild(ul)
+
+            if (!cats[i]["id"].includes('a')) {
+                p.appendChild(li)
+            } else {
+                parId = "cat" + cats[i]["id"].substring(0, cats[i]["id"].lastIndexOf("a"))
+                par = document.getElementById(parId);
+                par.appendChild(li)
+            }
+        }
+    }
+
+    function createItemsTable(items, type) {
+        clearField()
+        var itemsInRow = 0;
+        var f = document.getElementById('field')
+        if (items.length === 0) {
+            var d = document.createElement("div")
+            d.innerHTML = "No items in this category for such filters"
+            d.style = "font-size: 20px;"
+            f.appendChild(d)
+            return
+        }
+        var r = document.createElement("div")
+        r.style = "margin-bottom: 15px;"
+        r.className = "row"
+        for (i in items) {
+            if (itemsInRow === rowLen) {
+                f.appendChild(r)
+                r = document.createElement("div")
+                r.style = "margin-bottom: 15px;"
+                r.className = "row"
+                itemsInRow = 0
+            }
+            if (type == "product") {
+                id = "p" + items[i]["id"]
+                text = "Name: " + items[i]["name"] + "\nPrice: " + items[i]["price"] + "\nWarranty_period: " + items[i]["warranty_period"]
+                img = items[i]["img_url"]
+                addItem(r, id, img, text)
+            } else if (type == "brand") {
+                id = "b" + items[i]["id"]
+                text = "Name: " + items[i]["name"] + "\nDescription: " + items[i]["description"]
+                img = items[i]["img_url"]
+                addItem(r, id, img, text)
+            }
+            itemsInRow += 1
+        }
+        if (itemsInRow !== 0) {
+            f.appendChild(r)
+        }
+    }
+
+    function addItem(parent, id, img, text) {
+        var col = document.createElement("div")
+        var image = document.createElement("img")
+        col.className = "col"
+        col.style = "max-width: 200px; max-height: 300px; margin-right: 15px; float: left; "
+        col.id = id
+        image.className = "card-img-top"
+        image.style = "width: 200px; height: 200px;"
+        image.setAttribute("src", img)
+        var ta = document.createElement("textarea")
+        ta.className = "shop-text"
+        ta.style = "min-width: 200px; min-height: 100px; max-width: 200px; max-height: 100px; background-color: #99c2ff"
+        ta.setAttribute("readonly", "readonly")
+        ta.value = text
+        col.appendChild(image)
+        col.appendChild(ta)
+        parent.appendChild(col)
+    }
+
+    function clearField() {
+        var f = document.getElementById("field")
+        for (var i = f.childNodes.length - 1; i > -1; i--) {
+            f.childNodes[i].remove()
+        }
+    }
+
+</script>
+</body>
+</html>
